@@ -12,48 +12,106 @@
     <nav class="sidebar">
         <div class="sidebar-header"><div class="logo"><span class="logo-icon">ⵣ</span><span class="logo-text">أمازيغ</span></div></div>
         <ul class="nav-menu">
-            <li class="nav-item"><a href="index.html"><span class="nav-icon"><i class="fas fa-home"></i></span><span data-translate="home">الرئيسية</span></a></li>
-            <li class="nav-item active"><a href="games.html"><span class="nav-icon"><i class="fas fa-gamepad"></i></span><span data-translate="educational_games">الألعاب</span></a></li>
-            <li class="nav-item"><a href="family.html"><span class="nav-icon"><i class="fas fa-users"></i></span><span data-translate="family_space">فضاء الأسرة</span></a></li>
-            <li class="nav-item"><a href="reports.html"><span class="nav-icon"><i class="fas fa-chart-bar"></i></span><span data-translate="reports">التقارير</span></a></li>
-            <li class="nav-item"><a href="admin.html"><span class="nav-icon"><i class="fas fa-cog"></i></span><span data-translate="administration">الإدارة</span></a></li>
+            <li class="nav-item"><a href="index.html"><span class="nav-icon"><i class="fas fa-home"></i></span><span>الرئيسية</span></a></li>
+            <li class="nav-item active"><a href="games.html"><span class="nav-icon"><i class="fas fa-gamepad"></i></span><span>الألعاب</span></a></li>
+            <li class="nav-item"><a href="family.html"><span class="nav-icon"><i class="fas fa-users"></i></span><span>فضاء الأسرة</span></a></li>
+            <li class="nav-item"><a href="reports.html"><span class="nav-icon"><i class="fas fa-chart-bar"></i></span><span>التقارير</span></a></li>
+            <li class="nav-item"><a href="admin.html"><span class="nav-icon"><i class="fas fa-cog"></i></span><span>الإدارة</span></a></li>
         </ul>
-        <div class="sidebar-footer"><button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span data-translate="logout">خروج</span></button></div>
+        <div class="sidebar-footer"><button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>خروج</span></button></div>
     </nav>
     <main class="main-content">
         <header class="page-header">
             <h1>🎮 الألعاب التربوية</h1>
             <div class="header-actions">
                 <div class="lang-switcher"><button class="lang-btn active" data-lang="ar" onclick="setLang('ar')">🇲🇦</button><button class="lang-btn" data-lang="fr" onclick="setLang('fr')">🇫🇷</button><button class="lang-btn" data-lang="amz" onclick="setLang('amz')">ⵣ</button></div>
-                <select id="game-selector" class="game-select"><option value="memory">🧠 لعبة الذاكرة</option><option value="order">📋 لعبة الترتيب</option><option value="words">📝 لعبة الكلمات</option><option value="wheel">🎡 لعبة العجلة</option></select>
+                <select id="game-selector" class="game-select">
+                    <option value="memory">🧠 لعبة الذاكرة</option>
+                    <option value="order">📋 لعبة الترتيب</option>
+                    <option value="words">📝 لعبة الكلمات</option>
+                    <option value="wheel">🎡 لعبة العجلة</option>
+                </select>
             </div>
         </header>
         <div class="student-selector"><label>👤 المتعلم:</label><span id="student-name">فاطمة أمال</span><span class="session-badge">⭐ <span id="dojo-points">45</span> نقطة</span></div>
-        <div id="memory-game" class="game-container active"><div class="game-area"><div style="display:flex;justify-content:space-between;margin-bottom:20px"><span>✅ <span id="mp">0</span>/<span id="tp">6</span></span><span>🔄 <span id="ma">0</span></span><span>📊 <span id="macc">0%</span></span></div><div class="tifinagh-grid" id="memory-grid"></div><div class="game-message" id="memory-msg">ⵉⵎⵉⴽ ⵙ ⵉⵎⵉⴽ</div><div class="game-actions"><button class="btn" onclick="resetMemory()">🔄 جديد</button><button class="btn btn-outline" onclick="hintMemory()">💡 تلميح</button></div></div></div>
-        <div id="order-game" class="game-container"><div class="game-area"><div style="display:flex;justify-content:space-between;margin-bottom:20px"><span>📊 مستوى: <span id="ol">1</span>/3</span><span>⭐ نتيجة: <span id="os">0</span></span></div><h3 style="text-align:center">رتب الحروف</h3><p id="oi" style="text-align:center"></p><div id="order-letters" style="display:flex;flex-wrap:wrap;justify-content:center;gap:15px;margin:30px 0"></div><div id="order-slots" style="display:flex;flex-wrap:wrap;justify-content:center;gap:15px;min-height:100px"></div><div class="game-message" id="order-msg"></div><div class="game-actions"><button class="btn" onclick="checkOrder()">✅ تحقق</button><button class="btn btn-secondary" onclick="resetOrder()">🔄 إعادة</button><button class="btn btn-outline" id="next-btn" onclick="nextLevel()" disabled>التالي →</button></div></div></div>
-        <div id="word-game" class="game-container"><div class="game-area"><div style="display:flex;justify-content:space-between;margin-bottom:20px"><span>✅ <span id="wp">0</span>/<span id="tw">6</span></span></div><div id="word-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px"></div><div class="game-message" id="word-msg">اربط الكلمة بمعناها</div><div class="game-actions"><button class="btn" onclick="resetWords()">🔄 جديد</button></div></div></div>
-        <div id="wheel-game" class="game-container"><div class="game-area"><div class="wheel-section"><div style="position:relative"><canvas id="wheelCanvas" width="350" height="350" style="width:100%"></canvas><div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:3rem;color:#ef4444">▼</div><button class="spin-btn" id="spinBtn" onclick="spinWheel()">🎡 دور العجلة</button></div><div style="flex:1"><span class="category-tag" id="catDisplay">حيوانات</span><div class="word-blanks" id="wordBlanks"></div><div style="display:flex;justify-content:space-between;padding:15px;background:#fef3c7;border-radius:15px"><span>⭐ <span id="ws">0</span></span></div><div class="wheel-keyboard" id="wheelKeyboard"></div><div class="game-message" id="wheel-msg">🎡 دور العجلة ثم اختر حرفاً!</div><div class="game-actions"><button class="btn" onclick="resetWheel()">🔄 جديد</button></div></div></div></div></div>
+
+        <!-- لعبة الذاكرة -->
+        <div id="memory-game" class="game-container active">
+            <div class="game-area">
+                <div style="display:flex;justify-content:space-between;margin-bottom:20px"><span>✅ <span id="mp">0</span>/<span id="tp">6</span></span><span>🔄 <span id="ma">0</span></span><span>📊 <span id="macc">0%</span></span></div>
+                <div class="tifinagh-grid" id="memory-grid"></div>
+                <div class="game-message" id="memory-msg">ⵉⵎⵉⴽ ⵙ ⵉⵎⵉⴽ</div>
+                <div class="game-actions"><button class="btn" onclick="resetMemory()">🔄 جديد</button><button class="btn btn-outline" onclick="hintMemory()">💡 تلميح</button></div>
+            </div>
+        </div>
+
+        <!-- لعبة الترتيب -->
+        <div id="order-game" class="game-container">
+            <div class="game-area">
+                <div style="display:flex;justify-content:space-between;margin-bottom:20px"><span>📊 مستوى: <span id="ol">1</span>/3</span><span>⭐ نتيجة: <span id="os">0</span></span></div>
+                <h3 style="text-align:center">رتب الحروف</h3><p id="oi" style="text-align:center"></p>
+                <div id="order-letters" style="display:flex;flex-wrap:wrap;justify-content:center;gap:15px;margin:30px 0"></div>
+                <div id="order-slots" style="display:flex;flex-wrap:wrap;justify-content:center;gap:15px;min-height:100px"></div>
+                <div class="game-message" id="order-msg"></div>
+                <div class="game-actions"><button class="btn" onclick="checkOrder()">✅ تحقق</button><button class="btn btn-secondary" onclick="resetOrder()">🔄 إعادة</button><button class="btn btn-outline" id="next-btn" onclick="nextLevel()" disabled>التالي →</button></div>
+            </div>
+        </div>
+
+        <!-- لعبة الكلمات -->
+        <div id="word-game" class="game-container">
+            <div class="game-area">
+                <div style="display:flex;justify-content:space-between;margin-bottom:20px"><span>✅ <span id="wp">0</span>/<span id="tw">6</span> مطابقات</span></div>
+                <div id="word-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px"></div>
+                <div class="game-message" id="word-msg">اربط الكلمة بمعناها</div>
+                <div class="game-actions"><button class="btn" onclick="resetWords()">🔄 لعبة جديدة</button></div>
+            </div>
+        </div>
+
+        <!-- لعبة العجلة -->
+        <div id="wheel-game" class="game-container">
+            <div class="game-area">
+                <div class="wheel-section">
+                    <div style="position:relative"><canvas id="wheelCanvas" width="350" height="350" style="width:100%"></canvas><div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:3rem;color:#ef4444">▼</div><button class="spin-btn" id="spinBtn" onclick="spinWheel()">🎡 دور العجلة</button></div>
+                    <div style="flex:1"><span class="category-tag" id="catDisplay">حيوانات</span><div class="word-blanks" id="wordBlanks"></div><div style="display:flex;justify-content:space-between;padding:15px;background:#fef3c7;border-radius:15px"><span>⭐ <span id="ws">0</span></span></div><div class="wheel-keyboard" id="wheelKeyboard"></div><div class="game-message" id="wheel-msg">🎡 دور العجلة ثم اختر حرفاً!</div><div class="game-actions"><button class="btn" onclick="resetWheel()">🔄 جديد</button></div></div></div>
+            </div>
+        </div>
     </main>
+
     <script src="translations.js"></script>
     <script src="script.js"></script>
     <script>
+        // ========== البيانات ==========
         const letters=[{c:'ⴰ',n:'يا'},{c:'ⴱ',n:'ياب'},{c:'ⴳ',n:'ياج'},{c:'ⴷ',n:'ياد'},{c:'ⴹ',n:'ياض'},{c:'ⴻ',n:'ياي'}];
-        const words=[{a:'ⴰⵔⴳⴰⵣ',b:'الرجل'},{a:'ⵜⴰⵎⵖⴰⵔⵜ',b:'المرأة'},{a:'ⴰⵖⵔⵓⵎ',b:'الخبز'},{a:'ⴰⵎⴰⵏ',b:'الماء'},{a:'ⵜⴰⴼⵓⵏⴰⵙⵜ',b:'البقرة'},{a:'ⴰⵢⴷⵉ',b:'الكلب'}];
+        const wordsList=[{a:'ⴰⵔⴳⴰⵣ',b:'الرجل'},{a:'ⵜⴰⵎⵖⴰⵔⵜ',b:'المرأة'},{a:'ⴰⵖⵔⵓⵎ',b:'الخبز'},{a:'ⴰⵎⴰⵏ',b:'الماء'},{a:'ⵜⴰⴼⵓⵏⴰⵙⵜ',b:'البقرة'},{a:'ⴰⵢⴷⵉ',b:'الكلب'}];
         let student={name:'فاطمة أمال',dojoPoints:45,id:1};
         let mem={cards:[],sel:null,lock:false,pairs:0,att:0,corr:0,preview:true,timer:null};
         let ord={letters:[],order:[],score:0,level:1};
         let wg={sel:null,pairs:0};
         let wh={word:'',cat:'',revealed:[],score:0,used:[],canSpin:true,spinVal:0,rot:0,spinning:false};
         const wseg=[{l:'100',v:100,c:'#ef4444'},{l:'200',v:200,c:'#3b82f6'},{l:'300',v:300,c:'#10b981'},{l:'400',v:400,c:'#f59e0b'},{l:'500',v:500,c:'#8b5cf6'},{l:'🎁',v:'gift',c:'#ec4899'},{l:'💔',v:'lose',c:'#64748b'},{l:'🎲',v:'extra',c:'#06b6d4'}];
+
         function loadStudent(){let sid=localStorage.getItem('studentId');let s=getStudents().find(x=>x.id===parseInt(sid));if(s)student=s;document.getElementById('student-name').textContent=student.name;document.getElementById('dojo-points').textContent=student.dojoPoints}
         function updatePoints(p){student.dojoPoints+=p;document.getElementById('dojo-points').textContent=student.dojoPoints;let s=getStudents();let st=s.find(x=>x.id===student.id);if(st)st.dojoPoints=student.dojoPoints;saveStudents(s)}
-        document.getElementById('game-selector').addEventListener('change',function(){document.querySelectorAll('.game-container').forEach(c=>c.classList.remove('active'));document.getElementById(this.value+'-game').classList.add('active');if(this.value==='memory')resetMemory();else if(this.value==='order')resetOrderGame();else if(this.value==='words')resetWords();else if(this.value==='wheel')initWheel()});
+
+        // ========== تبديل الألعاب ==========
+        document.getElementById('game-selector').addEventListener('change',function(){
+            document.querySelectorAll('.game-container').forEach(c=>c.classList.remove('active'));
+            document.getElementById(this.value+'-game').classList.add('active');
+            if(this.value==='memory')resetMemory();
+            else if(this.value==='order')resetOrderGame();
+            else if(this.value==='words')resetWords();
+            else if(this.value==='wheel')initWheel();
+        });
+
+        // ========== لعبة الذاكرة ==========
         function buildDeck(){let d=[];letters.forEach((l,i)=>{d.push({p:i,c:l.c,m:false,f:false});d.push({p:i,c:l.c,m:false,f:false})});return d.sort(()=>Math.random()-.5)}
         function renderMemory(){let g=document.getElementById('memory-grid');g.innerHTML='';mem.cards.forEach((c,i)=>{c.i=i;let d=document.createElement('div');d.className='t-card'+(c.m?' matched':'')+(c.f||mem.preview?' flipped':'');d.textContent=(c.m||c.f||mem.preview)?c.c:'ⵣ';d.onclick=()=>clickMemory(i);g.appendChild(d);c.e=d});updateMemStats()}
         function clickMemory(i){if(mem.preview){alert('انتظر!');return}if(mem.lock||mem.pairs===letters.length)return;let c=mem.cards[i];if(c.m||c.f)return;c.f=true;c.e.classList.add('flipped');c.e.textContent=c.c;if(mem.sel===null){mem.sel=i;return}let f=mem.cards[mem.sel];if(mem.sel===i){mem.sel=null;return}mem.att++;mem.lock=true;if(f.p===c.p){mem.corr++;f.m=c.m=true;f.e.classList.add('matched');c.e.classList.add('matched');mem.pairs++;updatePoints(2);document.getElementById('memory-msg').textContent='✅ أحسنت! +2';mem.sel=null;mem.lock=false;if(mem.pairs===letters.length){document.getElementById('memory-msg').textContent='🎉 أكملت جميع الحروف!';updatePoints(5)}}else{document.getElementById('memory-msg').textContent='❌ حاول مرة أخرى!';setTimeout(()=>{if(!f.m){f.f=false;f.e.classList.remove('flipped');f.e.textContent='ⵣ'}if(!c.m){c.f=false;c.e.classList.remove('flipped');c.e.textContent='ⵣ'}mem.sel=null;mem.lock=false},800)}updateMemStats()}
         function updateMemStats(){document.getElementById('mp').textContent=mem.pairs;document.getElementById('tp').textContent=letters.length;document.getElementById('ma').textContent=mem.att;document.getElementById('macc').textContent=(mem.att>0?Math.round((mem.corr/mem.att)*100):0)+'%'}
         function resetMemory(){if(mem.timer)clearTimeout(mem.timer);mem.cards=buildDeck();mem.sel=null;mem.lock=false;mem.pairs=0;mem.att=0;mem.corr=0;mem.preview=true;renderMemory();document.getElementById('memory-msg').textContent='👀 انظر (5 ثواني)...';mem.timer=setTimeout(()=>{mem.preview=false;mem.cards.forEach(c=>{if(!c.m){c.f=false;if(c.e){c.e.classList.remove('flipped');c.e.textContent='ⵣ'}}});document.getElementById('memory-msg').textContent='تذكر وطابق!'},5000)}
         function hintMemory(){let u=mem.cards.filter(c=>!c.m&&!c.f);if(u.length>0)document.getElementById('memory-msg').textContent='💡 ابحث عن '+u[0].c}
+
+        // ========== لعبة الترتيب ==========
         function resetOrderGame(){ord.level=1;ord.score=0;startOrder()}
         function startOrder(){let l=ord.level;let c=l===1?3:(l===2?4:6);let s=[...letters].sort(()=>Math.random()-.5).slice(0,c);ord.letters=s;ord.order=[];document.getElementById('oi').textContent='رتب: '+s.map(x=>x.c).join(' - ');document.getElementById('ol').textContent=l;document.getElementById('os').textContent=ord.score;renderOrdLett();renderOrdSlots();document.getElementById('order-msg').textContent='';document.getElementById('next-btn').disabled=true}
         function renderOrdLett(){document.getElementById('order-letters').innerHTML=ord.letters.map(l=>`<div class="order-letter" onclick="selOrd('${l.c}')">${l.c}</div>`).join('')}
@@ -63,8 +121,55 @@
         function checkOrder(){let cor=[...ord.letters].sort((a,b)=>a.c.localeCompare(b.c)).map(x=>x.c);if(ord.order.length!==cor.length){document.getElementById('order-msg').textContent='❌ رتب الكل!';return}if(ord.order.every((c,i)=>c===cor[i])){let p=ord.level*5;ord.score+=p;updatePoints(p);document.getElementById('os').textContent=ord.score;document.getElementById('order-msg').textContent='✅ صحيح! +'+p;document.getElementById('next-btn').disabled=false}else{document.getElementById('order-msg').textContent='❌ خطأ!'}}
         function resetOrder(){ord.order=[];renderOrdSlots();document.getElementById('order-msg').textContent=''}
         function nextLevel(){if(ord.level<3){ord.level++;startOrder()}else{document.getElementById('order-msg').textContent='🎉 كل المستويات!';updatePoints(10)}}
-        function resetWords(){wg.sel=null;wg.pairs=0;let aw=words.map(w=>({t:w.a,p:w.a,ty:'a'}));let bw=words.map(w=>({t:w.b,p:w.a,ty:'b'}));let all=[...aw,...bw].sort(()=>Math.random()-.5);let g=document.getElementById('word-grid');g.innerHTML=all.map(c=>`<div class="word-card" data-p="${c.p}" data-ty="${c.ty}" data-m="false">${c.t}</div>`).join('');document.querySelectorAll('.word-card').forEach(c=>c.addEventListener('click',clickWord));document.getElementById('tw').textContent=words.length;document.getElementById('wp').textContent='0';document.getElementById('word-msg').textContent='اربط الكلمة بمعناها'}
-        function clickWord(e){let c=e.currentTarget;if(c.dataset.m==='true')return;if(!wg.sel){document.querySelectorAll('.word-card').forEach(x=>x.style.background='white');c.style.background='#fef3c7';wg.sel=c}else{let f=wg.sel;let s=c;if(f===s){wg.sel=null;return}if(f.dataset.p===s.dataset.p&&f.dataset.ty!==s.dataset.ty){f.dataset.m='true';s.dataset.m='true';f.classList.add('matched');s.classList.add('matched');f.style.background='#10b981';s.style.background='#10b981';wg.pairs++;document.getElementById('wp').textContent=wg.pairs;updatePoints(3);document.getElementById('word-msg').textContent='✅ صحيح! +3';if(wg.pairs===words.length){document.getElementById('word-msg').textContent='🎉 كل الكلمات!';updatePoints(5)}}else{f.style.background='white';document.getElementById('word-msg').textContent='❌ خطأ!'}wg.sel=null}}
+
+        // ========== لعبة الكلمات (مصححة) ==========
+        function resetWords(){
+            wg.sel=null;wg.pairs=0;
+            let ac=wordsList.map(w=>({t:w.a,p:w.a,ty:'a'}));
+            let bc=wordsList.map(w=>({t:w.b,p:w.a,ty:'b'}));
+            let all=[...ac,...bc].sort(()=>Math.random()-.5);
+            let grid=document.getElementById('word-grid');
+            grid.innerHTML='';
+            all.forEach(card=>{
+                let div=document.createElement('div');
+                div.className='word-card';
+                div.textContent=card.t;
+                div.dataset.p=card.p;
+                div.dataset.ty=card.ty;
+                div.dataset.m='false';
+                div.onclick=function(){clickWord(this)};
+                grid.appendChild(div);
+            });
+            document.getElementById('tw').textContent=wordsList.length;
+            document.getElementById('wp').textContent='0';
+            document.getElementById('word-msg').textContent='اربط الكلمة بمعناها';
+        }
+        function clickWord(card){
+            if(card.dataset.m==='true')return;
+            if(!wg.sel){
+                document.querySelectorAll('#word-grid .word-card').forEach(c=>{if(c.dataset.m==='false')c.style.background='white'});
+                card.style.background='#fef3c7';
+                wg.sel=card;
+            }else{
+                let f=wg.sel;let s=card;
+                if(f===s){wg.sel=null;return}
+                if(f.dataset.p===s.dataset.p&&f.dataset.ty!==s.dataset.ty){
+                    f.dataset.m='true';s.dataset.m='true';
+                    f.classList.add('matched');s.classList.add('matched');
+                    f.style.background='#10b981';s.style.background='#10b981';
+                    f.style.color='white';s.style.color='white';
+                    wg.pairs++;document.getElementById('wp').textContent=wg.pairs;
+                    updatePoints(3);document.getElementById('word-msg').textContent='✅ صحيح! +3';
+                    if(wg.pairs===wordsList.length){document.getElementById('word-msg').textContent='🎉 كل الكلمات!';updatePoints(5)}
+                }else{
+                    f.style.background='white';
+                    document.getElementById('word-msg').textContent='❌ خطأ!';
+                }
+                wg.sel=null;
+            }
+        }
+
+        // ========== لعبة العجلة ==========
         function getWheelWords(){let d=localStorage.getItem('teacherWords');return d?JSON.parse(d):{animals:['ⴰⵢⴷⵉ','ⴰⵎⵓⵛ','ⵉⵣⵎ'],colors:['ⴰⵣⴳⴳⵯⴰⵖ','ⴰⵡⵔⴰⵖ'],objects:['ⵜⴰⴼⵓⵏⴰⵙⵜ','ⴰⵖⵔⵓⵎ']}}
         function getAllWords(){let w=getWheelWords();return[...w.animals,...w.colors,...w.objects]}
         function drawWheel(){let c=document.getElementById('wheelCanvas');if(!c)return;let ctx=c.getContext('2d');let cx=175,cy=175,r=155;let sa=(2*Math.PI)/wseg.length;ctx.clearRect(0,0,350,350);wseg.forEach((s,i)=>{let st=i*sa+wh.rot;let en=st+sa;ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,st,en);ctx.closePath();ctx.fillStyle=s.c;ctx.fill();ctx.strokeStyle='white';ctx.lineWidth=2;ctx.stroke();ctx.save();ctx.translate(cx,cy);ctx.rotate(st+sa/2);ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='white';ctx.font='bold 16px Cairo';ctx.fillText(s.l,r*.7,0);ctx.restore()});ctx.beginPath();ctx.arc(cx,cy,35,0,2*Math.PI);ctx.fillStyle='#1e293b';ctx.fill();ctx.fillStyle='#fbbf24';ctx.font='bold 18px Cairo';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🎡',cx,cy)}
@@ -77,8 +182,9 @@
         function revealRandom(){let h=wh.revealed.reduce((a,r,i)=>{if(!r)a.push(i);return a},[]);if(h.length>0){wh.revealed[h[Math.floor(Math.random()*h.length)]]=true;renderBlanks()}}
         function initWheel(){drawWheel();loadWheelWord()}
         function resetWheel(){wh.score=0;document.getElementById('ws').textContent='0';loadWheelWord()}
+
         document.addEventListener('DOMContentLoaded',function(){loadStudent();resetMemory()});
-        window.selOrd=selOrd;window.remOrd=remOrd;window.checkOrder=checkOrder;window.resetOrder=resetOrder;window.nextLevel=nextLevel;window.selWheel=selWheel;
+        window.selOrd=selOrd;window.remOrd=remOrd;window.checkOrder=checkOrder;window.resetOrder=resetOrder;window.nextLevel=nextLevel;window.selWheel=selWheel;window.clickWord=clickWord;
     </script>
 </body>
 </html>
