@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فضاء الأسرة | منصة الأمازيغية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="logo"><span>ⵣ</span><span data-translate="family_space">فضاء الأسرة</span></div>
+        <div class="user-info">
+            <div class="lang-switcher"><button class="lang-btn active" data-lang="ar" onclick="setLang('ar')">🇲🇦</button><button class="lang-btn" data-lang="fr" onclick="setLang('fr')">🇫🇷</button><button class="lang-btn" data-lang="amz" onclick="setLang('amz')">ⵣ</button></div>
+            <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> خروج</button>
+        </div>
+    </div>
+    <div class="main-content" style="margin:30px auto;max-width:900px;padding:0 20px">
+        <div class="welcome-banner"><h1>👨‍👩‍👧 مرحباً بكم في فضاء الأسرة</h1><p>تابع تقدم ابنك في تعلم الأمازيغية</p></div>
+        <div class="student-card"><div class="student-info"><div class="student-avatar" id="student-avatar">👧</div><div class="student-details"><h2 id="student-name">فاطمة أمال</h2><p id="student-class">السنة الثانية ابتدائي</p><p>رمز الأسرة: <span class="family-code" id="family-code">AMZ-2024-FA</span></p></div><div class="dojo-score"><div>👾</div><div class="points" id="dojo-score">45</div><span>نقطة</span></div></div></div>
+        <div class="progress-card"><h3 data-translate="your_child_progress">📈 تقدم ابنك</h3><div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:85%">85%</div></div></div>
+        <div class="tips-card"><h3 data-translate="tips_for_home">💡 نصائح للمنزل</h3><div class="tips-grid"><div class="tip-box" onclick="openGame()"><span class="icon">🎮</span><p data-translate="home_game">لعبة الحروف</p></div><div class="tip-box" onclick="openStory()"><span class="icon">📖</span><p data-translate="story">قصة الأسد والفأر</p></div><div class="tip-box" onclick="openReward()"><span class="icon">⭐</span><p data-translate="give_reward">مكافأة (+5)</p></div><div class="tip-box" onclick="openSpeak()"><span class="icon">🗣️</span><p data-translate="speak_amazigh">تحدث بالأمازيغية</p></div></div></div>
+        <div class="support-message"><p>💚 دعمكم لأبنائكم في تعلم الأمازيغية يساهم في تحسين انتباههم وتحصيلهم الدراسي.</p></div>
+    </div>
+    <div class="modal-overlay" id="modal" onclick="closeModal()"><div class="modal-content" onclick="event.stopPropagation()"><div class="modal-header"><h2 id="modal-title"></h2><button class="modal-close" onclick="closeModal()">&times;</button></div><div id="modal-body"></div></div></div>
+    <script src="translations.js"></script>
+    <script src="script.js"></script>
+    <script>
+        let student=null;
+        function loadStudent(){let fc=localStorage.getItem('familyCode')||localStorage.getItem('studentId');let s=getStudents();student=s.find(x=>x.familyCode===fc)||s.find(x=>x.id==parseInt(fc))||s[0];if(student){document.getElementById('student-name').textContent=student.name;document.getElementById('student-class').textContent=student.class||'';document.getElementById('family-code').textContent=student.familyCode;document.getElementById('student-avatar').textContent=student.avatar||'👧';document.getElementById('dojo-score').textContent=student.dojoPoints;document.getElementById('progress-fill').style.width=(student.progress||0)+'%';document.getElementById('progress-fill').textContent=(student.progress||0)+'%'}}
+        function openModal(){document.getElementById('modal').classList.add('active')}
+        function closeModal(){document.getElementById('modal').classList.remove('active')}
+        function openGame(){let l=[{c:'ⴰ',n:'يا'},{c:'ⴱ',n:'ياب'},{c:'ⴳ',n:'ياج'},{c:'ⴷ',n:'ياد'},{c:'ⴹ',n:'ياض'},{c:'ⴻ',n:'ياي'}];let r=l[Math.floor(Math.random()*l.length)];let w=l.filter(x=>x.c!==r.c).sort(()=>Math.random()-.5).slice(0,3);let o=[r,...w].sort(()=>Math.random()-.5);document.getElementById('modal-title').textContent='🎮 لعبة الحروف';document.getElementById('modal-body').innerHTML=`<div style="text-align:center"><p>ما اسم هذا الحرف؟</p><div style="font-size:8rem;background:#f8fafc;display:inline-block;padding:20px 50px;border-radius:30px;margin:20px 0">${r.c}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">${o.map(l=>`<button onclick="checkAns('${l.c}','${r.c}','${l.n}')" style="padding:15px;border:2px solid #e2e8f0;border-radius:15px;font-family:Cairo;font-size:1.1rem;cursor:pointer;background:white">${l.n}</button>`).join('')}</div><p id="game-result" style="margin-top:20px;font-weight:600"></p></div>`;openModal()}
+        function checkAns(s,c,n){document.getElementById('game-result').innerHTML=s===c?'✅ أحسنت!':'❌ الإجابة: '+n;document.getElementById('game-result').style.color=s===c?'#10b981':'#ef4444'}
+        function openStory(){document.getElementById('modal-title').textContent='📖 قصة الأسد والفأر';document.getElementById('modal-body').innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px"><div style="background:#e8f5e9;padding:20px;border-radius:15px"><p>ⵉⴽⴽⴰ ⵜⵜ ⵉⵏⵏ ⵢⴰⵏ ⵡⴰⵙⵙ، ⵉⵣⵎ ⵉⵙⴽⵔ ⵉⵎⵉⴽⴽ ⵏ ⵓⵖⵔⴷⴰ.</p><p style="margin-top:10px">ⵉⵏⵏⴰ ⵓⵖⵔⴷⴰ: "ⵙⵙⵔⵃ ⵉⵢⵉ ⴰⵢ ⵓⴳⵍⵍⵉⴷ!"</p></div><div style="background:#fff3e0;padding:20px;border-radius:15px"><p>في يوم من الأيام، أمسك الأسد بفأر صغير.</p><p style="margin-top:10px">قال الفأر: "أطلق سراحي أيها الملك!"</p></div></div>`;openModal()}
+        function openReward(){document.getElementById('modal-title').textContent='⭐ مكافأة';document.getElementById('modal-body').innerHTML=`<div style="text-align:center"><div style="font-size:5rem">🏆</div><p style="margin:20px 0">امنح ابنك 5 نقاط!</p><button onclick="giveReward()" style="padding:15px 30px;background:#f59e0b;color:white;border:none;border-radius:15px;font-family:Cairo;font-size:1.2rem;cursor:pointer">🎁 امنح 5 نقاط</button><p id="reward-result" style="margin-top:20px;font-weight:600"></p></div>`;openModal()}
+        function giveReward(){if(student){student.dojoPoints+=5;document.getElementById('dojo-score').textContent=student.dojoPoints;let s=getStudents();let st=s.find(x=>x.id===student.id);if(st)st.dojoPoints=student.dojoPoints;saveStudents(s);document.getElementById('reward-result').innerHTML='✅ تمت إضافة 5 نقاط!'}}
+        function openSpeak(){let p=[{a:'ⴰⵣⵓⵍ',t:'مرحباً'},{a:'ⵎⴰⵏⵣⴰⴽⵉⵏ?',t:'كيف حالك؟'},{a:'ⵜⴰⵏⵎⵎⵉⵔⵜ',t:'شكراً'},{a:'ⴰⵔ ⵜⵉⵎⵍⵉⵍⵉⵜ',t:'إلى اللقاء'}];document.getElementById('modal-title').textContent='🗣️ تحدث بالأمازيغية';document.getElementById('modal-body').innerHTML=p.map(x=>`<div style="background:linear-gradient(135deg,#2d6a4f,#52b788);color:white;padding:15px;border-radius:15px;margin-bottom:10px;text-align:center"><div style="font-size:1.5rem;font-weight:700">${x.a}</div><div style="margin-top:5px">${x.t}</div></div>`).join('');openModal()}
+        document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal()});
+        document.addEventListener('DOMContentLoaded',function(){loadStudent()});
+        window.checkAns=checkAns;window.giveReward=giveReward;
+    </script>
+</body>
+</html>

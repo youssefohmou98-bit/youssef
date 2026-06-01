@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقارير | منصة الأمازيغية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="sidebar-header"><div class="logo"><span class="logo-icon">ⵣ</span><span class="logo-text">أمازيغ</span></div></div>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="index.html"><span class="nav-icon"><i class="fas fa-home"></i></span><span data-translate="home">الرئيسية</span></a></li>
+            <li class="nav-item"><a href="games.html"><span class="nav-icon"><i class="fas fa-gamepad"></i></span><span data-translate="educational_games">الألعاب</span></a></li>
+            <li class="nav-item"><a href="family.html"><span class="nav-icon"><i class="fas fa-users"></i></span><span data-translate="family_space">فضاء الأسرة</span></a></li>
+            <li class="nav-item active"><a href="reports.html"><span class="nav-icon"><i class="fas fa-chart-bar"></i></span><span data-translate="reports">التقارير</span></a></li>
+            <li class="nav-item"><a href="admin.html"><span class="nav-icon"><i class="fas fa-cog"></i></span><span data-translate="administration">الإدارة</span></a></li>
+        </ul>
+        <div class="sidebar-footer"><button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span data-translate="logout">خروج</span></button></div>
+    </nav>
+    <main class="main-content">
+        <header class="page-header"><h1>📊 التقارير</h1><div class="header-actions"><div class="lang-switcher"><button class="lang-btn active" data-lang="ar" onclick="setLang('ar')">🇲🇦</button><button class="lang-btn" data-lang="fr" onclick="setLang('fr')">🇫🇷</button><button class="lang-btn" data-lang="amz" onclick="setLang('amz')">ⵣ</button></div><button class="btn" onclick="exportCSV()">📥 CSV</button><button class="btn" onclick="window.print()">📄 PDF</button></div></header>
+        <div class="summary-cards"><div class="summary-card"><span>المتعلمين</span><div class="summary-value" id="ts">0</div></div><div class="summary-card"><span>متوسط التحسن</span><div class="summary-value" id="ai">0%</div></div><div class="summary-card"><span>الأسر</span><div class="summary-value" id="af">0</div></div><div class="summary-card highlight"><span>الانتباه</span><div class="summary-value" id="oa">0%</div></div></div>
+        <div class="dashboard-card"><h3>📈 نتائج المتعلمين</h3><table class="admin-table"><thead><tr><th>المتعلم</th><th>القسم</th><th>قبلي</th><th>بعدي</th><th>تحسن</th><th>Dojo</th><th>الأسرة</th></tr></thead><tbody id="report-body"></tbody></table></div>
+    </main>
+    <script src="translations.js"></script>
+    <script src="script.js"></script>
+    <script>
+        function render(){let s=getStudents();document.getElementById('ts').textContent=s.length;let a=Math.round(s.reduce((sum,x)=>sum+x.progress,0)/s.length);document.getElementById('oa').textContent=a+'%';document.getElementById('ai').textContent='+'+(a-45)+'%';document.getElementById('af').textContent=s.filter(x=>x.familyCode).length;document.getElementById('report-body').innerHTML=s.map(x=>`<tr><td>${x.name}</td><td>${x.class}</td><td>45%</td><td>${x.progress}%</td><td style="color:${x.progress-45>30?'#10b981':'#f59e0b'}">+${x.progress-45}%</td><td>${x.dojoPoints}</td><td>${x.familyCode?'✅':'❌'}</td></tr>`).join('')}
+        function exportCSV(){let s=getStudents();let c='المتعلم,القسم,قبلي,بعدي,تحسن,Dojo,أسرة\n';s.forEach(x=>c+=`${x.name},${x.class},45%,${x.progress}%,+${x.progress-45}%,${x.dojoPoints},${x.familyCode?'مشاركة':'غير مشاركة'}\n`);let b=new Blob(['\ufeff'+c],{type:'text/csv;charset=utf-8'});let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='تقرير.csv';a.click()}
+        document.addEventListener('DOMContentLoaded',function(){render()});
+    </script>
+</body>
+</html>

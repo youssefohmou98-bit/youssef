@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإدارة | منصة الأمازيغية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="sidebar-header"><div class="logo"><span class="logo-icon">ⵣ</span><span class="logo-text">أمازيغ</span></div></div>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="index.html"><span class="nav-icon"><i class="fas fa-home"></i></span><span data-translate="home">الرئيسية</span></a></li>
+            <li class="nav-item"><a href="games.html"><span class="nav-icon"><i class="fas fa-gamepad"></i></span><span data-translate="educational_games">الألعاب</span></a></li>
+            <li class="nav-item"><a href="family.html"><span class="nav-icon"><i class="fas fa-users"></i></span><span data-translate="family_space">فضاء الأسرة</span></a></li>
+            <li class="nav-item"><a href="reports.html"><span class="nav-icon"><i class="fas fa-chart-bar"></i></span><span data-translate="reports">التقارير</span></a></li>
+            <li class="nav-item active"><a href="admin.html"><span class="nav-icon"><i class="fas fa-cog"></i></span><span data-translate="administration">الإدارة</span></a></li>
+        </ul>
+        <div class="sidebar-footer"><button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span data-translate="logout">خروج</span></button></div>
+    </nav>
+    <main class="main-content">
+        <header class="page-header"><h1>⚙️ الإدارة</h1><div class="header-actions"><div class="lang-switcher"><button class="lang-btn active" data-lang="ar" onclick="setLang('ar')">🇲🇦</button><button class="lang-btn" data-lang="fr" onclick="setLang('fr')">🇫🇷</button><button class="lang-btn" data-lang="amz" onclick="setLang('amz')">ⵣ</button></div><button class="btn" onclick="saveAll()">💾 حفظ</button></div></header>
+        <div class="section-header"><h3 data-translate="students_list">👥 المتعلمين</h3><button class="btn" onclick="addStudent()">+ إضافة</button></div>
+        <div class="dashboard-card"><table class="admin-table"><thead><tr><th>الاسم</th><th>القسم</th><th>البريد</th><th>رمز الأسرة</th><th>Dojo</th><th>تقدم</th><th>إجراءات</th></tr></thead><tbody id="students-body"></tbody></table></div>
+        <div class="section-header"><h3>📝 كلمات الألعاب</h3><button class="btn" onclick="addWord()">+ إضافة كلمة</button></div>
+        <div class="dashboard-card" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px"><div><h4>🐾 حيوانات</h4><div id="animals-list"></div></div><div><h4>🎨 ألوان</h4><div id="colors-list"></div></div><div><h4>📦 أشياء</h4><div id="objects-list"></div></div></div>
+    </main>
+    <script src="translations.js"></script>
+    <script src="script.js"></script>
+    <script>
+        let students=getStudents();
+        function saveAll(){saveStudents(students);alert('✅ تم الحفظ')}
+        function renderStudents(){document.getElementById('students-body').innerHTML=students.map(s=>`<tr><td>${s.name}</td><td>${s.class}</td><td>${s.email||'-'}</td><td><code>${s.familyCode}</code></td><td>${s.dojoPoints}</td><td><div style="height:10px;background:#e2e8f0;border-radius:10px"><div style="width:${s.progress}%;height:100%;background:#10b981;border-radius:10px"></div></div>${s.progress}%</td><td><button class="btn-sm" onclick="editStudent(${s.id})">✏️</button> <button class="btn-sm" style="background:#ef4444" onclick="delStudent(${s.id})">🗑️</button></td></tr>`).join('')}
+        function addStudent(){let n=prompt('الاسم:');if(!n)return;let c=prompt('القسم:','الثانية 2');let e=prompt('البريد الإلكتروني:');if(!e)return;let p=prompt('كلمة المرور:','123456');let id=Math.max(...students.map(x=>x.id))+1;students.push({id,name:n,class:c||'الثانية 2',email:e,password:p||'123456',familyCode:'AMZ-'+new Date().getFullYear()+'-'+Math.random().toString(36).substring(2,6).toUpperCase(),dojoPoints:0,progress:0,avatar:'👧'});saveAll();renderStudents();alert('✅ تمت الإضافة')}
+        function editStudent(id){let s=students.find(x=>x.id===id);if(!s)return;let n=prompt('الاسم:',s.name);if(n)s.name=n;let c=prompt('القسم:',s.class);if(c)s.class=c;let e=prompt('البريد:',s.email);if(e)s.email=e;saveAll();renderStudents()}
+        function delStudent(id){if(confirm('متأكد من الحذف؟')){students=students.filter(x=>x.id!==id);saveAll();renderStudents()}}
+        function getWords(){let d=localStorage.getItem('teacherWords');return d?JSON.parse(d):{animals:['ⴰⵢⴷⵉ','ⴰⵎⵓⵛ','ⵉⵣⵎ'],colors:['ⴰⵣⴳⴳⵯⴰⵖ','ⴰⵡⵔⴰⵖ'],objects:['ⵜⴰⴼⵓⵏⴰⵙⵜ','ⴰⵖⵔⵓⵎ']}}
+        function saveWords(w){localStorage.setItem('teacherWords',JSON.stringify(w));renderWords()}
+        function renderWords(){let w=getWords();document.getElementById('animals-list').innerHTML=w.animals.map(x=>`<span style="display:inline-flex;align-items:center;gap:5px;background:#f1f5f9;padding:5px 12px;border-radius:20px;margin:3px">${x} <button onclick="delWord('animals','${x}')" style="border:none;background:none;cursor:pointer;color:#ef4444">✕</button></span>`).join('');document.getElementById('colors-list').innerHTML=w.colors.map(x=>`<span style="display:inline-flex;align-items:center;gap:5px;background:#f1f5f9;padding:5px 12px;border-radius:20px;margin:3px">${x} <button onclick="delWord('colors','${x}')" style="border:none;background:none;cursor:pointer;color:#ef4444">✕</button></span>`).join('');document.getElementById('objects-list').innerHTML=w.objects.map(x=>`<span style="display:inline-flex;align-items:center;gap:5px;background:#f1f5f9;padding:5px 12px;border-radius:20px;margin:3px">${x} <button onclick="delWord('objects','${x}')" style="border:none;background:none;cursor:pointer;color:#ef4444">✕</button></span>`).join('')}
+        function addWord(){let w=prompt('الكلمة بالأمازيغية:');if(!w)return;let c=prompt('الفئة:\n1- حيوانات\n2- ألوان\n3- أشياء');let d=getWords();if(c==='1')d.animals.push(w);else if(c==='2')d.colors.push(w);else d.objects.push(w);saveWords(d)}
+        function delWord(cat,word){let w=getWords();w[cat]=w[cat].filter(x=>x!==word);saveWords(w)}
+        document.addEventListener('DOMContentLoaded',function(){renderStudents();renderWords()});
+        window.addStudent=addStudent;window.editStudent=editStudent;window.delStudent=delStudent;window.addWord=addWord;window.delWord=delWord;
+    </script>
+</body>
+</html>

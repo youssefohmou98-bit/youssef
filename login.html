@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول | منصة الأمازيغية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body{justify-content:center;align-items:center;background:linear-gradient(135deg,#1a5f7a,#0d3b4f,#2d6a4f);padding:20px}
+        .login-container{background:white;border-radius:40px;padding:40px;width:100%;max-width:480px;box-shadow:0 25px 50px rgba(0,0,0,.25)}
+        .logo{text-align:center;margin-bottom:15px}.logo-icon{font-size:4rem;color:#2d6a4f}
+        h2{text-align:center;margin-bottom:25px;font-size:1.8rem;color:#1e293b}
+        .user-type-tabs{display:flex;gap:10px;margin-bottom:25px}
+        .type-tab{flex:1;padding:12px;border:2px solid #e2e8f0;background:white;border-radius:15px;cursor:pointer;font-family:'Cairo',sans-serif;font-weight:600;color:#64748b;text-align:center}
+        .type-tab.active{background:#3b82f6;border-color:#3b82f6;color:white}
+        .form-group{margin-bottom:20px}label{display:block;margin-bottom:8px;color:#1e293b;font-weight:600}
+        .input-wrapper{position:relative}.input-wrapper i{position:absolute;right:15px;top:50%;transform:translateY(-50%);color:#94a3b8}
+        input{width:100%;padding:15px 45px 15px 15px;border-radius:15px;border:2px solid #e2e8f0;font-family:'Cairo',sans-serif;font-size:1rem}
+        input:focus{outline:none;border-color:#3b82f6}
+        .checkbox-wrapper{display:flex;align-items:center;gap:10px;margin:15px 0}
+        .login-btn{width:100%;padding:15px;background:#3b82f6;color:white;border:none;border-radius:15px;font-weight:bold;font-size:1.2rem;cursor:pointer;font-family:'Cairo',sans-serif;box-shadow:0 5px 0 #1e40af;margin:20px 0 15px}
+        .login-btn:hover{background:#2563eb;transform:translateY(-2px)}
+        .error-message{color:#ef4444;text-align:center;margin-top:15px;min-height:25px}
+        .demo-info{margin-top:20px;padding:15px;background:#fef3c7;border-radius:15px;color:#92400e;font-size:.9rem}
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo"><div class="logo-icon">ⵣ</div></div>
+        <h2 data-translate="login">تسجيل الدخول</h2>
+        <div class="lang-switcher" style="justify-content:center;margin-bottom:25px">
+            <button class="lang-btn active" data-lang="ar" onclick="setLang('ar')">🇲🇦 عربي</button>
+            <button class="lang-btn" data-lang="fr" onclick="setLang('fr')">🇫🇷 FR</button>
+            <button class="lang-btn" data-lang="amz" onclick="setLang('amz')">ⵣ</button>
+        </div>
+        <div class="user-type-tabs">
+            <button class="type-tab active" data-type="teacher" onclick="switchType('teacher')"><i class="fas fa-chalkboard-teacher"></i> معلم</button>
+            <button class="type-tab" data-type="student" onclick="switchType('student')"><i class="fas fa-user-graduate"></i> تلميذ</button>
+            <button class="type-tab" data-type="family" onclick="switchType('family')"><i class="fas fa-users"></i> ولي أمر</button>
+        </div>
+        <form onsubmit="doLogin(event)">
+            <div id="email-fields">
+                <div class="form-group"><label data-translate="email">البريد الإلكتروني</label><div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" id="email" placeholder="example@domain.com" required></div></div>
+                <div class="form-group"><label data-translate="password">كلمة المرور</label><div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" id="password" placeholder="••••••••" required></div></div>
+            </div>
+            <div id="family-fields" style="display:none">
+                <div class="form-group"><label data-translate="family_code">رمز الأسرة</label><div class="input-wrapper"><i class="fas fa-key"></i><input type="text" id="family-code" placeholder="AMZ-2024-XXXX"></div></div>
+            </div>
+            <div class="checkbox-wrapper"><input type="checkbox" id="remember-me"><label for="remember-me" data-translate="remember_me">تذكرني</label></div>
+            <button type="submit" class="login-btn" data-translate="login_button">دخول</button>
+        </form>
+        <div id="login-error" class="error-message"></div>
+        <div class="demo-info"><strong>🔑 بيانات تجريبية:</strong> 👨‍🏫 معلم: prof@amazigh.ma / 123456<br>👧 تلميذ: fatima@amazigh.ma / 123456<br>👨‍👩‍👧 ولي أمر: AMZ-2024-FA</div>
+    </div>
+    <script src="translations.js"></script>
+    <script src="script.js"></script>
+    <script>
+        let userType='teacher';
+        function switchType(t){userType=t;document.querySelectorAll('.type-tab').forEach(b=>{b.classList.remove('active');if(b.dataset.type===t)b.classList.add('active')});document.getElementById('email-fields').style.display=t==='family'?'none':'block';document.getElementById('family-fields').style.display=t==='family'?'block':'none'}
+        function doLogin(e){e.preventDefault();let err=document.getElementById('login-error');if(userType==='family'){let c=document.getElementById('family-code').value.trim().toUpperCase();let s=getStudents();let st=s.find(x=>x.familyCode===c);if(st){localStorage.setItem('userType','family');localStorage.setItem('familyCode',st.familyCode);localStorage.setItem('studentId',st.id);localStorage.setItem('userName',st.name);window.location.href='family.html'}else{err.textContent='❌ رمز الأسرة غير صحيح'}}else{let em=document.getElementById('email').value.trim().toLowerCase();let pw=document.getElementById('password').value;if(userType==='teacher'){if(em==='prof@amazigh.ma'&&pw==='123456'){localStorage.setItem('userType','teacher');localStorage.setItem('userName','أ. محمد أمزيان');window.location.href='index.html'}else{err.textContent='❌ البريد أو كلمة المرور غير صحيحة'}}else{let s=getStudents();let st=s.find(x=>x.email===em&&x.password===pw);if(st){localStorage.setItem('userType','student');localStorage.setItem('userName',st.name);localStorage.setItem('studentId',st.id);localStorage.setItem('familyCode',st.familyCode);window.location.href='games.html'}else{err.textContent='❌ البريد أو كلمة المرور غير صحيحة'}}}}
+        document.addEventListener('DOMContentLoaded',function(){let e=localStorage.getItem('savedEmail');if(e){document.getElementById('email').value=e;document.getElementById('remember-me').checked=true}});
+    </script>
+</body>
+</html>
